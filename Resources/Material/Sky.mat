@@ -101,11 +101,11 @@ Material:
     - _Northern_Lights_Smoothness: 0.15
     - _Northern_Lights_Steps: 32
     - _Power: 1
-    - _Projector_Altitude: 0.1
-    - _Projector_Azimuth: 0.1
-    - _Projector_Height: 0.1
+    - _Projector_Altitude: 0
+    - _Projector_Azimuth: 0
+    - _Projector_Height: 0.001
     - _Projector_Intensity: 0
-    - _Projector_Width: 0.1
+    - _Projector_Width: 0.001
     - _Rotation: 90
     - _Saturation_Shift: 0.794
     - _Skybox_Strength: 35.33
