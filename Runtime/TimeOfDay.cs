@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.HighDefinition;
 
 namespace UnityEssentials
 {
@@ -47,7 +48,9 @@ namespace UnityEssentials
 
         [HideInInspector] public Light SunLight;
         [HideInInspector] public Light MoonLight;
+        [HideInInspector] public Volume SkyVolume;
         [HideInInspector] public Volume NightVolume;
+        [HideInInspector] public Material SkyMaterial;
 
         public static bool IsDay { get; private set; }
         public static bool IsNight => !IsDay;
@@ -92,7 +95,7 @@ namespace UnityEssentials
             Location = PresetLocations.Custom;
 
 #if UNITY_EDITOR
-        [MenuItem("GameObject/Essentials/Time of Day", false)]
+        [MenuItem("GameObject/Essentials/Time of Day", false, priority = 100)]
         private static void InstantiateAdvancedSpotLight(MenuCommand menuCommand)
         {
             var prefab = ResourceLoaderEditor.InstantiatePrefab("UnityEssentials_Prefab_TimeOfDay", "Time of Day");
@@ -105,7 +108,10 @@ namespace UnityEssentials
                 var timeOfDay = prefab.GetComponent<TimeOfDay>();
                 timeOfDay.SunLight = prefab.transform.Find("Directional Sun Light")?.GetComponent<Light>();
                 timeOfDay.MoonLight = prefab.transform.Find("Directional Moon Light")?.GetComponent<Light>();
+                timeOfDay.SkyVolume = prefab.transform.Find("Physical Based Sky Volume")?.GetComponent<Volume>();
                 timeOfDay.NightVolume = prefab.transform.Find("Night Color Adjustment Volume")?.GetComponent<Volume>();
+                if (timeOfDay.SkyVolume.profile.TryGet<PhysicallyBasedSky>(out var skyOverride))
+                    timeOfDay.SkyMaterial = skyOverride.material.value;
             }
 
             GameObjectUtility.SetParentAndAlign(prefab, menuCommand.context as GameObject);
@@ -132,6 +138,9 @@ namespace UnityEssentials
             {
                 var sunRotation = Quaternion.LookRotation(-sunDirection, Vector3.up);
                 SunLight.transform.rotation = Quaternion.Lerp(SunLight.transform.rotation, sunRotation, Time.deltaTime);
+                SunLight.transform.rotation = sunRotation;
+
+                SkyMaterial?.SetMatrix(s_skyPropertyID, GetSkyRotation());
 
                 var moonRotation = Quaternion.LookRotation(-moonDirection, Vector3.up);
                 MoonLight.transform.rotation = Quaternion.Lerp(MoonLight.transform.rotation, moonRotation, Time.deltaTime);
@@ -152,8 +161,20 @@ namespace UnityEssentials
             const float nauticalTwilight = 0.1f;
             DayWeight = Mathf.Clamp01(Vector3.Dot(-SunLight.transform.forward, Vector3.up).Remap(0, nauticalTwilight, 0, 1));
 
-            if (NightVolume != null) 
+            if (NightVolume != null)
                 NightVolume.weight = NightWeight;
+        }
+
+        private const string SkyPropertyName = "_Rotation";
+        private static readonly int s_skyPropertyID = Shader.PropertyToID(SkyPropertyName);
+        private Matrix4x4 GetSkyRotation()
+        {
+            var offsetVector = new Vector3(90, 0, 0);
+            var offsetRotation = Quaternion.AngleAxis(90f, offsetVector.normalized);
+            var debugMatrix = Matrix4x4.Rotate(offsetRotation);
+
+            var rotationMatrix = Matrix4x4.TRS(Vector3.zero, SunLight.transform.rotation, Vector3.one);
+            return rotationMatrix * debugMatrix;
         }
 
 #if UNITY_EDITOR
