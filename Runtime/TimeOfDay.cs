@@ -95,6 +95,19 @@ namespace UnityEssentials
             UpdateCelestialTargets();
         }
 
+#if UNITY_EDITOR
+        [MenuItem("GameObject/Essentials/Time of Day", false)]
+        private static void InstantiateAdvancedSpotLight(MenuCommand menuCommand)
+        {
+            var go = new GameObject("Time of Day");
+            var tod = go.AddComponent<TimeOfDay>();
+
+            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+            Undo.RegisterCreatedObjectUndo(go, "Create Time of Day");
+            Selection.activeObject = go;
+        }
+#endif
+
         private void GetCurrentTimeUTC() =>
             DateTime = new DateTime(Date.x, Date.y, Date.z, 0, 0, 0, DateTimeKind.Utc).AddHours(TimeInHours - UTCOffset);
 
