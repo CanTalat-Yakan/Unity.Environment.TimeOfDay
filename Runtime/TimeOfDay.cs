@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -23,13 +24,12 @@ namespace UnityEssentials
         public int UTCOffset;
     }
 
+    [ExecuteAlways]
     public class TimeOfDay : MonoBehaviour
     {
         [Header("Time Settings")]
         [Date] public Vector3Int Date;
-        [Time] public float InitialTimeInHours;
-        [Range(0, 24)] public float TimeInHours;
-        [OnValueChanged("InitialTimeInHours")] public void OnTimeInHoursValueChanged() => TimeInHours = InitialTimeInHours;
+        [Time] public float TimeInHours;
 
         [Header("Celestial Bodies")]
         public Light SunLight;
@@ -76,12 +76,18 @@ namespace UnityEssentials
         [OnValueChanged("Location")]
         public void OnLocationValueChanged()
         {
-            Debug.Log($"Location changed to: {_locationPreset[(int)Location].Name}");
+            if (Location == 0)
+                return;
+
             var preset = _locationPreset[(int)Location];
             Latitude = preset.Latitude;
             Longitude = preset.Longitude;
             UTCOffset = preset.UTCOffset;
         }
+
+        [OnValueChanged("Latitude", "Longitude", "UTCOffset")]
+        public void OnCustomValueChanged() =>
+            Location = PresetLocations.Custom;
 
         void Update()
         {
@@ -125,5 +131,27 @@ namespace UnityEssentials
             //if (NightProfile != null) NightProfile.weight = 1 - DayWeight;
         }
 
+#if UNITY_EDITOR
+        public void OnDrawGizmosSelected()
+        {
+            if (SunLight != null)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawRay(SunLight.transform.position, -SunLight.transform.forward * 2.3f);
+                Gizmos.DrawSphere(SunLight.transform.position - SunLight.transform.forward * 2.3f, 0.2f);
+
+                Handles.Label(SunLight.transform.position - SunLight.transform.forward * 2.3f + Vector3.up * 0.5f, "Sun");
+            }
+
+            if (MoonLight != null)
+            {
+                Gizmos.color = Color.white;
+                Gizmos.DrawRay(MoonLight.transform.position, -MoonLight.transform.forward * 2f);
+                Gizmos.DrawSphere(MoonLight.transform.position - MoonLight.transform.forward * 2f, 0.1f);
+
+                Handles.Label(MoonLight.transform.position - MoonLight.transform.forward * 2f + Vector3.up * 0.5f, "Moon");
+            }
+        }
+#endif
     }
 }
