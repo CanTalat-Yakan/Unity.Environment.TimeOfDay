@@ -32,10 +32,6 @@ namespace UnityEssentials
         [Date] public Vector3Int Date;
         [Time] public float TimeInHours;
 
-        [Header("Celestial Bodies")]
-        public Light SunLight;
-        public Light MoonLight;
-
         [Header("Location Presets")]
         public PresetLocations Location;
         [Tooltip("In Degrees")]
@@ -49,8 +45,9 @@ namespace UnityEssentials
         public UnityEvent DayEvents;
         public UnityEvent NightEvents;
 
-        [HideInInspector]
-        public Volume NightVolume;
+        [HideInInspector] public Light SunLight;
+        [HideInInspector] public Light MoonLight;
+        [HideInInspector] public Volume NightVolume;
 
         public static bool IsDay { get; private set; }
         public static bool IsNight => !IsDay;
@@ -94,25 +91,34 @@ namespace UnityEssentials
         public void OnCustomValueChanged() =>
             Location = PresetLocations.Custom;
 
+#if UNITY_EDITOR
+        [MenuItem("GameObject/Essentials/Time of Day", false)]
+        private static void InstantiateAdvancedSpotLight(MenuCommand menuCommand)
+        {
+            var prefab = ResourceLoaderEditor.InstantiatePrefab("UnityEssentials_Prefab_TimeOfDay", "Time of Day");
+            if (prefab != null)
+            {
+                PrefabUtility.UnpackPrefabInstance(prefab,
+                    PrefabUnpackMode.Completely,
+                    InteractionMode.AutomatedAction);
+
+                var timeOfDay = prefab.GetComponent<TimeOfDay>();
+                timeOfDay.SunLight = prefab.transform.Find("Directional Sun Light")?.GetComponent<Light>();
+                timeOfDay.MoonLight = prefab.transform.Find("Directional Moon Light")?.GetComponent<Light>();
+                timeOfDay.NightVolume = prefab.transform.Find("Night Color Adjustment Volume")?.GetComponent<Volume>();
+            }
+
+            GameObjectUtility.SetParentAndAlign(prefab, menuCommand.context as GameObject);
+            Undo.RegisterCreatedObjectUndo(prefab, "Create Time of Day");
+            Selection.activeObject = prefab;
+        }
+#endif
+
         void Update()
         {
             GetCurrentTimeUTC();
             UpdateCelestialTargets();
         }
-
-#if UNITY_EDITOR
-        [MenuItem("GameObject/Essentials/Time of Day", false)]
-        private static void InstantiateAdvancedSpotLight(MenuCommand menuCommand)
-        {
-            var go = new GameObject("Time of Day");
-            var tod = go.AddComponent<TimeOfDay>();
-            tod.NightVolume = go.transform.Find("Night Color Adjustment Volume")?.GetComponent<Volume>();
-
-            GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
-            Undo.RegisterCreatedObjectUndo(go, "Create Time of Day");
-            Selection.activeObject = go;
-        }
-#endif
 
         private void GetCurrentTimeUTC() =>
             DateTime = new DateTime(Date.x, Date.y, Date.z, 0, 0, 0, DateTimeKind.Utc).AddHours(TimeInHours - UTCOffset);
