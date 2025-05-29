@@ -1,0 +1,19 @@
+{
+    "name": "UnityEssentials.TimeOfDay",
+    "rootNamespace": "UnityEssentials",
+    "references": [
+        "GUID:fb551cb44db42fa4c8869533d45f30d7",
+        "GUID:026550602975f2c43ab20d00c9b1328b",
+        "GUID:6820a47831dd8c440847367a2ba0a6b4",
+        "GUID:3b3bf7f107ee18f49a6853ce8ac97a3d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
