@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Sky
+  m_Shader: {fileID: -6465566751694194690, guid: ff4ef7e858fa7044291c50bc0cc60644, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - LOCAL_SKY
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Cubemap:
+        m_Texture: {fileID: 8900000, guid: 6a109394e3869424792ee88d9a4994ac, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NorthernLights_Texture:
+        m_Texture: {fileID: 2800000, guid: d796d22cbe7d0eb4d8ad58901290258f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Projector_Texture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_5283fa6e7f894c50bbc6498bb75ffc33_Texture_1_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Skybox_Texture:
+        m_Texture: {fileID: 2800000, guid: 1eaec72f13969f54faa3af66e08842ed, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Stars_3D_texture:
+        m_Texture: {fileID: 11700000, guid: 3cb13f09c6aaea547a6dc09f1268f61e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Stars_Density_Cubemap:
+        m_Texture: {fileID: 8900000, guid: 0949663dd92bad34cb702acd4fb512ff, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2D:
+        m_Texture: {fileID: 2800000, guid: 1eaec72f13969f54faa3af66e08842ed, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Altitud: 0
+    - _Altitude: 0.21579964
+    - _Azimuth: 0.7577744
+    - _Cubemap_Power: 1
+    - _Cubemap_Strength: 1
+    - _Edge: 0.917
+    - _Flatness: 4
+    - _Height: 0.8
+    - _Hue_Shift: 1
+    - _Max_Thickness_Zone: 0.25
+    - _Noise_Energy_Influence: 0.572
+    - _Noise_Intensity: 0.01
+    - _Noise_Scale: 1
+    - _Northern_Lights_Intensity: 0
+    - _Power: 1
+    - _Projector_Altitude: 0.1
+    - _Projector_Azimuth: 0.1
+    - _Projector_Height: 0.1
+    - _Projector_Intensity: 0
+    - _Projector_Width: 0.1
+    - _Rotation: 90
+    - _Saturation_Shift: 0.794
+    - _Skybox_Strength: 35.33
+    - _Smoothness: 0.3
+    - _Stars_Brightness: 0.33
+    - _Stars_High_Density_Amount: 1
+    - _Stars_Intensity: 1
+    - _Stars_Low_Density_Amount: 0.713
+    - _Stars_Texture_Tiling: 10
+    - _Steps: 48
+    m_Colors:
+    - _Color: {r: 1, g: 0.34276712, b: 0.97382605, a: 0}
+    - _Global_Speed: {r: 0.01, g: -0.001, b: 0, a: 0}
+    - _Noise_Speed: {r: -0.02, g: 0.002, b: 0, a: 0}
+    - _Projector_Altitude: {r: 0, g: 0, b: 0, a: 0}
+    - _Vertical_Rotation: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

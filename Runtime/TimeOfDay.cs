@@ -2,6 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 
 namespace UnityEssentials
 {
@@ -48,9 +49,13 @@ namespace UnityEssentials
         public UnityEvent DayEvents;
         public UnityEvent NightEvents;
 
+        [HideInInspector]
+        public Volume NightVolume;
+
         public static bool IsDay { get; private set; }
         public static bool IsNight => !IsDay;
         public float DayWeight { get; private set; }
+        public float NightWeight => 1 - DayWeight;
 
         public SunPhase SunPhase { get; private set; }
         public float SunElevationAngle { get; private set; }
@@ -101,6 +106,7 @@ namespace UnityEssentials
         {
             var go = new GameObject("Time of Day");
             var tod = go.AddComponent<TimeOfDay>();
+            tod.NightVolume = go.transform.Find("Night Color Adjustment Volume")?.GetComponent<Volume>();
 
             GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
             Undo.RegisterCreatedObjectUndo(go, "Create Time of Day");
@@ -111,7 +117,6 @@ namespace UnityEssentials
         private void GetCurrentTimeUTC() =>
             DateTime = new DateTime(Date.x, Date.y, Date.z, 0, 0, 0, DateTimeKind.Utc).AddHours(TimeInHours - UTCOffset);
 
-        [ContextMenu("Update Celestial Targets")]
         private void UpdateCelestialTargets()
         {
             var sunDirection = CelestialBodiesCalculator.GetSunDirection(DateTime, Latitude, Longitude).ToVector3();
@@ -137,11 +142,12 @@ namespace UnityEssentials
                 NightEvents?.Invoke();
 
             IsDay = CelestialLightingController.IsSunLightAboveHorizon;
-            float nauticalTwilight = 0.1f;
+
+            const float nauticalTwilight = 0.1f;
             DayWeight = Mathf.Clamp01(Vector3.Dot(-SunLight.transform.forward, Vector3.up).Remap(0, nauticalTwilight, 0, 1));
 
-            //if (DayProfile != null) DayProfile.weight = DayWeight;
-            //if (NightProfile != null) NightProfile.weight = 1 - DayWeight;
+            if (NightVolume != null) 
+                NightVolume.weight = NightWeight;
         }
 
 #if UNITY_EDITOR
