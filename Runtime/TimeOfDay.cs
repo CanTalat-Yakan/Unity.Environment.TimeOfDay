@@ -101,10 +101,6 @@ namespace UnityEssentials
             var prefab = ResourceLoaderEditor.InstantiatePrefab("UnityEssentials_Prefab_TimeOfDay", "Time of Day");
             if (prefab != null)
             {
-                PrefabUtility.UnpackPrefabInstance(prefab,
-                    PrefabUnpackMode.Completely,
-                    InteractionMode.AutomatedAction);
-
                 var timeOfDay = prefab.GetComponent<TimeOfDay>();
                 timeOfDay.SunLight = prefab.transform.Find("Directional Sun Light")?.GetComponent<Light>();
                 timeOfDay.MoonLight = prefab.transform.Find("Directional Moon Light")?.GetComponent<Light>();
