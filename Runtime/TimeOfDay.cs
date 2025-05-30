@@ -161,10 +161,10 @@ namespace UnityEssentials
         {
             var offsetVector = new Vector3(90, 0, 0);
             var offsetRotation = Quaternion.AngleAxis(90f, offsetVector.normalized);
-            var debugMatrix = Matrix4x4.Rotate(offsetRotation);
+            var offsetMatrix = Matrix4x4.Rotate(offsetRotation);
 
             var rotationMatrix = Matrix4x4.TRS(Vector3.zero, SunLight.transform.rotation, Vector3.one);
-            return rotationMatrix * debugMatrix;
+            return rotationMatrix * offsetMatrix;
         }
 
 #if UNITY_EDITOR
