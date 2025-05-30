@@ -52,21 +52,15 @@ namespace UnityEssentials
         [HideInInspector] public Volume NightVolume;
         [HideInInspector] public Material SkyMaterial;
 
-        public static bool IsDay { get; private set; }
-        public static bool IsNight => !IsDay;
+        public DateTime DateTime { get; private set; }
+
+        public bool IsDay { get; private set; }
+        public bool IsNight => !IsDay;
         public float DayWeight { get; private set; }
         public float NightWeight => 1 - DayWeight;
 
-        public SunPhase SunPhase { get; private set; }
-        public float SunElevationAngle { get; private set; }
-        public float SunAzimuthAngle { get; private set; }
-
-        public MoonPhase MoonPhase { get; private set; }
-        public float MoonElevationAngle { get; private set; }
-        public float MoonAzimuthAngle { get; private set; }
-        public double MoonIllumination { get; private set; }
-        public double MoonDistance { get; private set; }
-        public DateTime DateTime { get; private set; }
+        [field: SerializeField] public SunProperties SunProperties { get; private set; }
+        [field: SerializeField] public MoonProperties MoonProperties { get; private set; }
 
         private LocationPreset[] _locationPreset = new[]
         {
@@ -142,10 +136,10 @@ namespace UnityEssentials
                 MoonLight.transform.rotation = Quaternion.Lerp(MoonLight.transform.rotation, moonRotation, Time.deltaTime);
             }
 
-            var sunProperties = CelestialBodiesCalculator.GetSunProperties(DateTime, Latitude, Longitude);
-            var moonProperties = CelestialBodiesCalculator.GetMoonProperties(DateTime, Latitude, Longitude);
+            SunProperties = CelestialBodiesCalculator.GetSunProperties(DateTime, Latitude, Longitude);
+            MoonProperties = CelestialBodiesCalculator.GetMoonProperties(DateTime, Latitude, Longitude);
 
-            CelestialLightingController.UpdateLightProperties(SunLight, MoonLight, sunProperties, moonProperties);
+            CelestialLightingController.UpdateLightProperties(SunLight, MoonLight, SunProperties, MoonProperties);
 
             if (IsNight && CelestialLightingController.IsSunLightAboveHorizon)
                 DayEvents?.Invoke();
