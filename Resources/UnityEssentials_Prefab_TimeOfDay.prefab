@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 108413550261149263}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -75,7 +75,7 @@ Transform:
   m_GameObject: {fileID: 348602654651376241}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -126,7 +126,7 @@ Transform:
   m_GameObject: {fileID: 454278275963592286}
   serializedVersion: 2
   m_LocalRotation: {x: 0.59119105, y: -0.23191719, z: -0.42587262, w: 0.64446884}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -143,7 +143,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 67736.89
+  m_Intensity: 67669.45
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -186,7 +186,7 @@ Light:
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 1
-  m_ColorTemperature: 6570
+  m_ColorTemperature: 5500
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: -0.0000000028438265, z: 6.07e-43, w: 5.3e-44}
   m_UseBoundingSphereOverride: 0
@@ -353,7 +353,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LensFlareData: {fileID: 11400000, guid: bd7eaf3bd49c39f4cb77bd809459aa72, type: 2}
   version: 0
-  intensity: 0.5644741
+  intensity: 0.56447405
   maxAttenuationDistance: 100
   maxAttenuationScale: 100
   distanceAttenuationCurve:
@@ -495,7 +495,7 @@ Transform:
   m_GameObject: {fileID: 2131258338890751798}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -519,8 +519,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Date: {x: 75, y: 6, z: 27}
   TimeInHours: 9.9
-  rotationOffset: {x: 0, y: 0, z: 0}
-  skyCorrectionIntensity: 0
   Location: 2
   Latitude: 50.9375
   Longitude: 6.9603
@@ -532,20 +530,22 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   SunLight: {fileID: 2853594944370861496}
+  SunLightData: {fileID: 0}
   MoonLight: {fileID: 7930857939245541571}
+  MoonLightData: {fileID: 0}
   SkyVolume: {fileID: 0}
   NightVolume: {fileID: 0}
   SkyMaterial: {fileID: 0}
   <SunProperties>k__BackingField:
-    AzimuthAngle: 0
-    ElevationAngle: 0
-    Phase: 0
+    AzimuthAngle: 103.55122680775989
+    ElevationAngle: 34.36578010604263
+    Phase: 4
   <MoonProperties>k__BackingField:
-    Distance: 0
-    Illumination: 0
-    AzimuthAngle: 0
-    ElevationAngle: 0
-    Phase: 0
+    Distance: 405352.48627104564
+    Illumination: 0.27011845400288603
+    AzimuthAngle: 198.3114828082946
+    ElevationAngle: 61.25191545656184
+    Phase: 7
 --- !u!1 &3246406247150785524
 GameObject:
   m_ObjectHideFlags: 0
@@ -573,7 +573,7 @@ Transform:
   m_GameObject: {fileID: 3246406247150785524}
   serializedVersion: 2
   m_LocalRotation: {x: -0.5160835, y: -0.07318174, z: -0.025438832, w: -0.85302705}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

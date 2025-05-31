@@ -24,12 +24,16 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Clouds_Cubemap:
+        m_Texture: {fileID: 8900000, guid: dd3d9d32870a8764f9561f779da76648, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Cubemap:
         m_Texture: {fileID: 8900000, guid: 6a109394e3869424792ee88d9a4994ac, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Ground_Cubemap:
-        m_Texture: {fileID: 8900000, guid: 1a5e03bae5d7a944384f0c7beb895865, type: 3}
+        m_Texture: {fileID: 8900000, guid: 44b732c496bfb5241930e4d270f167b4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Ground_Emission_Cubemap:
@@ -41,7 +45,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Northern_Lights_Texture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: d796d22cbe7d0eb4d8ad58901290258f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Projector_Texture:
@@ -95,17 +99,17 @@ Material:
     - _Noise_Energy_Influence: 0.572
     - _Noise_Intensity: 0.01
     - _Noise_Scale: 1
-    - _Northern_Lights_Edge: 0.9
+    - _Northern_Lights_Edge: 0.337
     - _Northern_Lights_Flatness: 4
-    - _Northern_Lights_Height: 0.4
-    - _Northern_Lights_Hue_Shift: 0
+    - _Northern_Lights_Height: 1
+    - _Northern_Lights_Hue_Shift: -0.058
     - _Northern_Lights_Intensity: 0
     - _Northern_Lights_Max_Thickness_Zone: 0.25
-    - _Northern_Lights_Noise_Energy_Influence: 0.5
+    - _Northern_Lights_Noise_Energy_Influence: 0.752
     - _Northern_Lights_Noise_Intensity: 0.01
-    - _Northern_Lights_Noise_Scale: 1
+    - _Northern_Lights_Noise_Scale: 1.62
     - _Northern_Lights_Rotation: 0
-    - _Northern_Lights_Saturation_Shift: 0
+    - _Northern_Lights_Saturation_Shift: 0.426
     - _Northern_Lights_Smoothness: 0.15
     - _Northern_Lights_Steps: 32
     - _Power: 1
@@ -118,7 +122,8 @@ Material:
     - _Saturation_Shift: 0.794
     - _Skybox_Strength: 35.33
     - _Smoothness: 0.3
-    - _Star_Correction_Intensity: 0
+    - _SpaceWeight: 0.001
+    - _Star_Correction_Intensity: 10
     - _Star_Correction_Weight: 1
     - _Star_Intensity_Correction: 10
     - _Stars_Brightness: 0.33

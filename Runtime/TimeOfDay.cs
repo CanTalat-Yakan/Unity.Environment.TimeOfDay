@@ -138,9 +138,11 @@ namespace UnityEssentials
         private const string SkyPropertyName = "_RotationMatrix";
         private const string EarthPropertyName = "_EarthRotationMatrix";
         private const string StarWeightPropertyName = "_Star_Correction_Weight";
+        private const string SpaceWeightName = "_SpaceWeight";
         private static readonly int s_earthPropertyID = Shader.PropertyToID(EarthPropertyName);
         private static readonly int s_skyPropertyID = Shader.PropertyToID(SkyPropertyName);
         private static readonly int s_starWeightPropertyID = Shader.PropertyToID(StarWeightPropertyName);
+        private static readonly int s_spaceWeightPropertyID = Shader.PropertyToID(SpaceWeightName);
         private Quaternion _sunRotation;
         private Quaternion _moonRotation;
         private Quaternion _skyRotation;
@@ -169,9 +171,10 @@ namespace UnityEssentials
                 _skyRotationLerped = Quaternion.Lerp(_skyRotationLerped, _skyRotation, Time.deltaTime);
                 SkyMaterial?.SetMatrix(s_skyPropertyID, GetRotationMatrix(_skyRotationLerped));
                 SkyMaterial?.SetFloat(s_starWeightPropertyID, DayWeight);
+                SkyMaterial?.SetFloat(s_spaceWeightPropertyID, SpaceWeight);
 
+                var earthRotationOffset = new Vector3(164.5f, 20.5f, 12.25f);
                 var earthSolarRotation = CalculateSolarRotation(sunStaticDirection, solarUp);
-                Vector3 earthRotationOffset = new (164.5f, 20.5f, 12.25f);
                 SkyMaterial?.SetMatrix(s_earthPropertyID, GetRotationMatrix(earthSolarRotation, earthRotationOffset));
 
 #if UNITY_EDITOR
@@ -212,6 +215,12 @@ namespace UnityEssentials
         private Quaternion CalculateSolarRotation(Vector3 sunDirection, Vector3 solarUp)
         {
             var finalRotation = Quaternion.LookRotation(-sunDirection, solarUp);
+            return finalRotation;
+        }
+
+        private Quaternion CalculateEarthRotation(float latitude, float longitude)
+        {
+            var finalRotation = Quaternion.Euler(latitude.Remap(-90, 90, 180, 0), 0f, longitude);
             return finalRotation;
         }
 
