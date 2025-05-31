@@ -136,7 +136,7 @@ namespace UnityEssentials
                 SunLight.transform.rotation = Quaternion.Lerp(SunLight.transform.rotation, sunRotation, Time.deltaTime);
                 SunLight.transform.rotation = sunRotation;
 
-                var skyRotation = CalculateSkyRotation(galacticUp);
+                var skyRotation = CalculateSkyRotation(sunDirection, galacticUp);
                 SkyMaterial?.SetMatrix(s_skyPropertyID, GetSkyRotation(skyRotation));
 
                 var moonRotation = Quaternion.LookRotation(-moonDirection, galacticUp);
@@ -162,17 +162,10 @@ namespace UnityEssentials
                 NightVolume.weight = NightWeight;
         }
 
-        private Quaternion CalculateSkyRotation(Vector3 galacticUp)
+        private Quaternion CalculateSkyRotation(Vector3 sunDirection, Vector3 galacticUp)
         {
-            // Use world up as reference to avoid rolling
-            Vector3 referenceUp = Vector3.up;
-
-            // Handle case where galactic up is parallel to world up
-            if (Vector3.Dot(galacticUp, referenceUp) > 0.99f)
-                referenceUp = Vector3.forward;
-
-            // Create rotation from galactic up to world up
-            return Quaternion.FromToRotation(referenceUp, galacticUp);
+            var finalRotation = Quaternion.LookRotation(-sunDirection, galacticUp);
+            return finalRotation;
         }
 
         private Matrix4x4 GetSkyRotation(Quaternion rotation)
@@ -202,6 +195,19 @@ namespace UnityEssentials
 
                 Handles.Label(MoonLight.transform.position - MoonLight.transform.forward * 2f + Vector3.up * 0.5f, "Moon");
             }
+
+            {
+                Gizmos.color = Color.cyan;
+                Vector3 galacticUp = CelestialBodiesCalculator
+                    .GetGalacticUpDirection(DateTime, Latitude, Longitude).ToVector3();
+                Gizmos.DrawRay(transform.position, galacticUp * 2f);
+                Gizmos.DrawSphere(transform.position + galacticUp * 2f, 0.1f);
+                Handles.Label(transform.position + galacticUp * 2f + Vector3.up * 0.5f, "Galactic Up");
+            }
+        }
+
+        void OnDrawGizmos()
+        {
         }
 #endif
     }
