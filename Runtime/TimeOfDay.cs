@@ -32,6 +32,8 @@ namespace UnityEssentials
         [Header("Time Settings")]
         [Date] public Vector3Int Date;
         [Time] public float TimeInHours;
+        public Vector3 rotationOffset;
+        public Vector3 rotationScale;
 
         [Header("Location Presets")]
         public PresetLocations Location;
@@ -119,20 +121,25 @@ namespace UnityEssentials
         private void GetCurrentTimeUTC() =>
             DateTime = new DateTime(Date.x, Date.y, Date.z, 0, 0, 0, DateTimeKind.Utc).AddHours(TimeInHours - UTCOffset);
 
+
+        private const string SkyPropertyName = "_RotationMatrix";
+        private static readonly int s_skyPropertyID = Shader.PropertyToID(SkyPropertyName);
         private void UpdateCelestialTargets()
         {
             var sunDirection = CelestialBodiesCalculator.GetSunDirection(DateTime, Latitude, Longitude).ToVector3();
             var moonDirection = CelestialBodiesCalculator.GetMoonDirection(DateTime, Latitude, Longitude).ToVector3();
+            var galacticUp = CelestialBodiesCalculator.GetGalacticUpDirection(DateTime, Latitude, Longitude).ToVector3();
 
             if (SunLight != null && MoonLight != null)
             {
-                var sunRotation = Quaternion.LookRotation(-sunDirection, Vector3.up);
+                var sunRotation = Quaternion.LookRotation(-sunDirection, galacticUp);
                 SunLight.transform.rotation = Quaternion.Lerp(SunLight.transform.rotation, sunRotation, Time.deltaTime);
                 SunLight.transform.rotation = sunRotation;
 
-                SkyMaterial?.SetMatrix(s_skyPropertyID, GetSkyRotation());
+                var skyRotation = CalculateSkyRotation(galacticUp);
+                SkyMaterial?.SetMatrix(s_skyPropertyID, GetSkyRotation(skyRotation));
 
-                var moonRotation = Quaternion.LookRotation(-moonDirection, Vector3.up);
+                var moonRotation = Quaternion.LookRotation(-moonDirection, galacticUp);
                 MoonLight.transform.rotation = Quaternion.Lerp(MoonLight.transform.rotation, moonRotation, Time.deltaTime);
             }
 
@@ -155,16 +162,24 @@ namespace UnityEssentials
                 NightVolume.weight = NightWeight;
         }
 
-        private const string SkyPropertyName = "_Rotation";
-        private static readonly int s_skyPropertyID = Shader.PropertyToID(SkyPropertyName);
-        private Matrix4x4 GetSkyRotation()
+        private Quaternion CalculateSkyRotation(Vector3 galacticUp)
         {
-            var offsetVector = new Vector3(90, 0, 0);
-            var offsetRotation = Quaternion.AngleAxis(90f, offsetVector.normalized);
-            var offsetMatrix = Matrix4x4.Rotate(offsetRotation);
+            // Use world up as reference to avoid rolling
+            Vector3 referenceUp = Vector3.up;
 
-            var rotationMatrix = Matrix4x4.TRS(Vector3.zero, SunLight.transform.rotation, Vector3.one);
-            return rotationMatrix * offsetMatrix;
+            // Handle case where galactic up is parallel to world up
+            if (Vector3.Dot(galacticUp, referenceUp) > 0.99f)
+                referenceUp = Vector3.forward;
+
+            // Create rotation from galactic up to world up
+            return Quaternion.FromToRotation(referenceUp, galacticUp);
+        }
+
+        private Matrix4x4 GetSkyRotation(Quaternion rotation)
+        {
+            var offsetRotation = Quaternion.Euler(rotationOffset);
+            var finalRotation = rotation * offsetRotation;
+            return Matrix4x4.Rotate(finalRotation).inverse;
         }
 
 #if UNITY_EDITOR
