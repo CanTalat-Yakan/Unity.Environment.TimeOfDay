@@ -93,22 +93,22 @@ MonoBehaviour:
     m_Value: 20000
   groundTint:
     m_OverrideState: 1
-    m_Value: {r: 0.11999998, g: 0.119538434, b: 0.119538434, a: 1}
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
   groundColorTexture:
     m_OverrideState: 1
-    m_Value: {fileID: 0}
+    m_Value: {fileID: 8900000, guid: 1a5e03bae5d7a944384f0c7beb895865, type: 3}
   groundEmissionTexture:
     m_OverrideState: 1
-    m_Value: {fileID: 0}
+    m_Value: {fileID: 8900000, guid: 8962c67a9f059ac4ca26fb6ce20b3c15, type: 3}
   groundEmissionMultiplier:
     m_OverrideState: 1
     m_Value: 1
   planetRotation:
     m_OverrideState: 1
-    m_Value: {x: 0, y: 0, z: 0}
+    m_Value: {x: 0, y: 0, z: 61.84}
   spaceEmissionTexture:
     m_OverrideState: 1
-    m_Value: {fileID: 0}
+    m_Value: {fileID: 8900000, guid: 6a109394e3869424792ee88d9a4994ac, type: 3}
   spaceEmissionMultiplier:
     m_OverrideState: 1
     m_Value: 1

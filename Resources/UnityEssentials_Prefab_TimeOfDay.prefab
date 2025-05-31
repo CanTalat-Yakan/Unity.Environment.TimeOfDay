@@ -125,7 +125,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 454278275963592286}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.23208223, y: -0.5911263, z: 0.1827907, w: 0.7505299}
+  m_LocalRotation: {x: 0.59119105, y: -0.23191719, z: -0.42587262, w: 0.64446884}
   m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -257,7 +257,7 @@ MonoBehaviour:
   flareSize: 2
   flareTint: {r: 1, g: 1, b: 1, a: 1}
   flareFalloff: 4
-  flareMultiplier: 1
+  flareMultiplier: 0
   surfaceTexture: {fileID: 0}
   surfaceTint: {r: 1, g: 1, b: 1, a: 1}
   m_Distance: 1.5e+11
@@ -519,6 +519,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Date: {x: 75, y: 6, z: 27}
   TimeInHours: 9.9
+  rotationOffset: {x: 0, y: 0, z: 0}
+  skyCorrectionIntensity: 0
   Location: 2
   Latitude: 50.9375
   Longitude: 6.9603
@@ -531,7 +533,19 @@ MonoBehaviour:
       m_Calls: []
   SunLight: {fileID: 2853594944370861496}
   MoonLight: {fileID: 7930857939245541571}
+  SkyVolume: {fileID: 0}
   NightVolume: {fileID: 0}
+  SkyMaterial: {fileID: 0}
+  <SunProperties>k__BackingField:
+    AzimuthAngle: 0
+    ElevationAngle: 0
+    Phase: 0
+  <MoonProperties>k__BackingField:
+    Distance: 0
+    Illumination: 0
+    AzimuthAngle: 0
+    ElevationAngle: 0
+    Phase: 0
 --- !u!1 &3246406247150785524
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,7 +572,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3246406247150785524}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.5029409, y: -0.13692337, z: 0.08106001, w: -0.849548}
+  m_LocalRotation: {x: -0.5160835, y: -0.07318174, z: -0.025438832, w: -0.85302705}
   m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
