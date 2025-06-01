@@ -155,8 +155,8 @@ namespace UnityEssentials
             var sunStaticDirection = CelestialBodiesCalculator.GetSunDirection(GetTime(), Latitude, Longitude).ToVector3();
             var solarUp = CelestialBodiesCalculator.GetSolarSystemUpDirection(GetTime(), Latitude, Longitude).ToVector3();
 
-            SpaceWeight = GetSpaceWeight();
             CameraElevation = GetCurrentRenderingCameraHeight();
+            SpaceWeight = GetSpaceWeight();
 
             if (SunLight != null && MoonLight != null && SkyMaterial != null)
             {
