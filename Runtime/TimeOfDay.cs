@@ -93,7 +93,6 @@ namespace UnityEssentials
         public void OnCustomValueChanged() =>
             Location = PresetLocations.Custom;
 
-
         [OnValueChanged("Date")]
         public void OnDateValueChanged() =>
             _staticDateTime = null;
@@ -123,6 +122,7 @@ namespace UnityEssentials
         private Quaternion _moonRotation;
         private Quaternion _skyRotation;
         private Quaternion _skyRotationLerped;
+        private Vector3 _earthRotationOffset = new Vector3(164.5f, 20.5f, 12.25f);
         private void UpdateCelestialTargets()
         {
             var sunDirection = CelestialBodiesCalculator.GetSunDirection(DateTime, Latitude, Longitude).ToVector3();
@@ -144,15 +144,14 @@ namespace UnityEssentials
                 MoonLight.transform.rotation = Quaternion.Lerp(MoonLight.transform.rotation, _moonRotation, Time.deltaTime);
                 MoonLightData.earthshine = GetMoonEarthshine();
 
-                _skyRotation = CalculateSkyRotation(sunDirection, galacticUp);
+                _skyRotation = CalculateCelestialRotation(sunDirection, galacticUp);
                 _skyRotationLerped = Quaternion.Lerp(_skyRotationLerped, _skyRotation, Time.deltaTime);
                 SkyMaterial?.SetMatrix(s_skyPropertyID, GetRotationMatrix(_skyRotationLerped));
                 SkyMaterial?.SetFloat(s_starWeightPropertyID, DayWeight);
                 SkyMaterial?.SetFloat(s_spaceWeightPropertyID, SpaceWeight);
 
-                var earthRotationOffset = new Vector3(164.5f, 20.5f, 12.25f);
-                var earthSolarRotation = CalculateSolarRotation(sunStaticDirection, solarUp);
-                SkyMaterial?.SetMatrix(s_earthPropertyID, GetRotationMatrix(earthSolarRotation, earthRotationOffset));
+                var earthSolarRotation = CalculateCelestialRotation(sunStaticDirection, solarUp);
+                SkyMaterial?.SetMatrix(s_earthPropertyID, GetRotationMatrix(earthSolarRotation, _earthRotationOffset));
 
 #if UNITY_EDITOR
                 if (!Application.isPlaying)
@@ -183,23 +182,8 @@ namespace UnityEssentials
                 NightVolume.weight = NightWeight;
         }
 
-        private Quaternion CalculateSkyRotation(Vector3 sunDirection, Vector3 galacticUp)
-        {
-            var finalRotation = Quaternion.LookRotation(-sunDirection, galacticUp);
-            return finalRotation;
-        }
-
-        private Quaternion CalculateSolarRotation(Vector3 sunDirection, Vector3 solarUp)
-        {
-            var finalRotation = Quaternion.LookRotation(-sunDirection, solarUp);
-            return finalRotation;
-        }
-
-        private Quaternion CalculateEarthRotation(float latitude, float longitude)
-        {
-            var finalRotation = Quaternion.Euler(latitude.Remap(-90, 90, 180, 0), 0f, longitude);
-            return finalRotation;
-        }
+        private Quaternion CalculateCelestialRotation(Vector3 direction, Vector3 up) =>
+            Quaternion.LookRotation(-direction, up);
 
         private Matrix4x4 GetRotationMatrix(Quaternion rotation, Vector3? rotationOffset = null)
         {
@@ -233,8 +217,44 @@ namespace UnityEssentials
         private float GetMoonEarthshine()
         {
             const float minEarthshine = 0.01f;
-            return minEarthshine * SpaceWeight;
+            return minEarthshine * (1 - SpaceWeight);
         }
 
+#if UNITY_EDITOR
+        public void OnDrawGizmosSelected()
+        {
+            if (CameraElevation > 1000)
+                Handles.Label(transform.position, "o");
+            else
+            {
+                if (SunLight != null)
+                {
+                    Gizmos.color = Color.yellow;
+                    Gizmos.DrawRay(SunLight.transform.position, -SunLight.transform.forward * 2.3f);
+                    Gizmos.DrawSphere(SunLight.transform.position - SunLight.transform.forward * 2.3f, 0.2f);
+
+                    Handles.Label(SunLight.transform.position - SunLight.transform.forward * 2.3f + Vector3.up * 0.35f, "Sun");
+                }
+
+                if (MoonLight != null)
+                {
+                    Gizmos.color = Color.white;
+                    Gizmos.DrawRay(MoonLight.transform.position, -MoonLight.transform.forward * 2f);
+                    Gizmos.DrawSphere(MoonLight.transform.position - MoonLight.transform.forward * 2f, 0.1f);
+
+                    Handles.Label(MoonLight.transform.position - MoonLight.transform.forward * 2f + Vector3.up * 0.25f, "Moon");
+                }
+
+                if (GalacticUp != null)
+                {
+                    Gizmos.color = Color.cyan;
+                    Gizmos.DrawRay(transform.position, GalacticUp * 2f);
+                    Gizmos.DrawSphere(transform.position + GalacticUp * 2f, 0.1f);
+
+                    Handles.Label(transform.position + GalacticUp * 2f + Vector3.up * 0.25f, "Galactic Up");
+                }
+            }
+        }
+#endif
     }
 }
