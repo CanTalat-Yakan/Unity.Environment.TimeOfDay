@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
-using static UnityEngine.LightAnchor;
 
 namespace UnityEssentials
 {
@@ -28,7 +27,7 @@ namespace UnityEssentials
     }
 
     [ExecuteAlways]
-    public class TimeOfDay : MonoBehaviour
+    public class TimeOfDay : Singleton<TimeOfDay>
     {
         [Header("Time Settings")]
         [Date] public Vector3Int Date;
@@ -63,6 +62,7 @@ namespace UnityEssentials
         public float NightWeight => 1 - DayWeight;
         public float SpaceWeight { get; private set; }
         public float CameraElevation { get; private set; }
+        public Vector3 GalacticUp { get; private set; }
 
         [field: SerializeField] public SunProperties SunProperties { get; private set; }
         [field: SerializeField] public MoonProperties MoonProperties { get; private set; }
@@ -98,30 +98,6 @@ namespace UnityEssentials
         public void OnDateValueChanged() =>
             _staticDateTime = null;
 
-#if UNITY_EDITOR
-        [MenuItem("GameObject/Essentials/Time of Day", false, priority = 100)]
-        private static void InstantiateAdvancedSpotLight(MenuCommand menuCommand)
-        {
-            var prefab = ResourceLoaderEditor.InstantiatePrefab("UnityEssentials_Prefab_TimeOfDay", "Time of Day");
-            if (prefab != null)
-            {
-                var timeOfDay = prefab.GetComponent<TimeOfDay>();
-                timeOfDay.SunLight = prefab.transform.Find("Directional Sun Light")?.GetComponent<Light>();
-                timeOfDay.SunLightData = prefab.transform.Find("Directional Sun Light")?.GetComponent<HDAdditionalLightData>();
-                timeOfDay.MoonLight = prefab.transform.Find("Directional Moon Light")?.GetComponent<Light>();
-                timeOfDay.MoonLightData = prefab.transform.Find("Directional Moon Light")?.GetComponent<HDAdditionalLightData>();
-                timeOfDay.SkyVolume = prefab.transform.Find("Physical Based Sky Volume")?.GetComponent<Volume>();
-                timeOfDay.NightVolume = prefab.transform.Find("Night Color Adjustment Volume")?.GetComponent<Volume>();
-                if (timeOfDay.SkyVolume.profile.TryGet<PhysicallyBasedSky>(out var skyOverride))
-                    timeOfDay.SkyMaterial = skyOverride.material.value;
-            }
-
-            GameObjectUtility.SetParentAndAlign(prefab, menuCommand.context as GameObject);
-            Undo.RegisterCreatedObjectUndo(prefab, "Create Time of Day");
-            Selection.activeObject = prefab;
-        }
-#endif
-
         void Update()
         {
             GetCurrentTimeUTC();
@@ -155,6 +131,7 @@ namespace UnityEssentials
             var sunStaticDirection = CelestialBodiesCalculator.GetSunDirection(GetTime(), Latitude, Longitude).ToVector3();
             var solarUp = CelestialBodiesCalculator.GetSolarSystemUpDirection(GetTime(), Latitude, Longitude).ToVector3();
 
+            GalacticUp = galacticUp.normalized;
             CameraElevation = GetCurrentRenderingCameraHeight();
             SpaceWeight = GetSpaceWeight();
 
@@ -259,46 +236,5 @@ namespace UnityEssentials
             return minEarthshine * SpaceWeight;
         }
 
-#if UNITY_EDITOR
-        public void OnDrawGizmosSelected()
-        {
-            if (CameraElevation > 1000)
-                Handles.Label(transform.position, "o");
-            else
-            {
-                if (SunLight != null)
-                {
-                    Gizmos.color = Color.yellow;
-                    Gizmos.DrawRay(SunLight.transform.position, -SunLight.transform.forward * 2.3f);
-                    Gizmos.DrawSphere(SunLight.transform.position - SunLight.transform.forward * 2.3f, 0.2f);
-
-                    Handles.Label(SunLight.transform.position - SunLight.transform.forward * 2.3f + Vector3.up * 0.35f, "Sun");
-                }
-
-                if (MoonLight != null)
-                {
-                    Gizmos.color = Color.white;
-                    Gizmos.DrawRay(MoonLight.transform.position, -MoonLight.transform.forward * 2f);
-                    Gizmos.DrawSphere(MoonLight.transform.position - MoonLight.transform.forward * 2f, 0.1f);
-
-                    Handles.Label(MoonLight.transform.position - MoonLight.transform.forward * 2f + Vector3.up * 0.25f, "Moon");
-                }
-
-                {
-                    Gizmos.color = Color.cyan;
-                    Vector3 galacticUp = CelestialBodiesCalculator
-                        .GetGalacticUpDirection(DateTime, Latitude, Longitude).ToVector3();
-                    Gizmos.DrawRay(transform.position, galacticUp * 2f);
-                    Gizmos.DrawSphere(transform.position + galacticUp * 2f, 0.1f);
-
-                    Handles.Label(transform.position + galacticUp * 2f + Vector3.up * 0.25f, "Galactic Up");
-                }
-            }
-        }
-
-        void OnDrawGizmos()
-        {
-        }
-#endif
     }
 }

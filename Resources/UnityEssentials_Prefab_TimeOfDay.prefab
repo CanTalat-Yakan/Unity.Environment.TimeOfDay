@@ -186,7 +186,7 @@ Light:
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 1
-  m_ColorTemperature: 5500
+  m_ColorTemperature: 6500
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: -0.0000000028438265, z: 6.07e-43, w: 5.3e-44}
   m_UseBoundingSphereOverride: 0
@@ -229,7 +229,7 @@ MonoBehaviour:
   m_ShapeHeight: 0.5
   m_AspectRatio: 1
   m_ShapeRadius: 0.025
-  m_SoftnessScale: 1
+  m_SoftnessScale: 0.1
   m_UseCustomSpotLightShadowCone: 0
   m_CustomSpotLightShadowCone: 30
   m_MaxSmoothness: 0.99
@@ -561,10 +561,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TimeOfDay: {fileID: 400111595024159048}
   LightingScenarioBaker: {fileID: 0}
-  LightingScenarioCount: 1
-  CurrentLightingScenario: 
-  NextLightingScenario: 
-  CurrentBlendFactor: 0
+  LightingScenarioCount: 8
+  CurrentLightingScenario: OutdoorsScene 0700
+  NextLightingScenario: OutdoorsScene 1200
+  CurrentBlendFactor: 0.5801999
 --- !u!1 &3246406247150785524
 GameObject:
   m_ObjectHideFlags: 0
@@ -724,7 +724,7 @@ MonoBehaviour:
   flareTint: {r: 1, g: 1, b: 1, a: 1}
   flareFalloff: 4
   flareMultiplier: 1
-  surfaceTexture: {fileID: 2800000, guid: cce9f0cf7e606e547a7317aedb4ad6d9, type: 3}
+  surfaceTexture: {fileID: 2800000, guid: 9f06700a2919226428822448654a8321, type: 3}
   surfaceTint: {r: 1, g: 1, b: 1, a: 1}
   m_Distance: 384400000
   m_UseRayTracedShadows: 0
