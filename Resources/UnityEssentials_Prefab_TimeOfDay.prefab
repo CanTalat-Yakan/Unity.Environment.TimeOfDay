@@ -182,7 +182,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 1
+  m_Lightmapping: 4
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 1
@@ -479,6 +479,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2181266623910672649}
   - component: {fileID: 400111595024159048}
+  - component: {fileID: 8309216408037411154}
   m_Layer: 0
   m_Name: UnityEssentials_Prefab_TimeOfDay
   m_TagString: Untagged
@@ -546,6 +547,24 @@ MonoBehaviour:
     AzimuthAngle: 198.3114828082946
     ElevationAngle: 61.25191545656184
     Phase: 7
+--- !u!114 &8309216408037411154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131258338890751798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f075a7f2d708e8244b446418e2fe7207, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TimeOfDay: {fileID: 400111595024159048}
+  LightingScenarioBaker: {fileID: 0}
+  LightingScenarioCount: 1
+  CurrentLightingScenario: 
+  NextLightingScenario: 
+  CurrentBlendFactor: 0
 --- !u!1 &3246406247150785524
 GameObject:
   m_ObjectHideFlags: 0

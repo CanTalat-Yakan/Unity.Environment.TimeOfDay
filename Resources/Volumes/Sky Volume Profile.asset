@@ -18,7 +18,7 @@ MonoBehaviour:
     m_Value: 0
   skyIntensityMode:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 2
   exposure:
     m_OverrideState: 1
     m_Value: 0
@@ -72,7 +72,7 @@ MonoBehaviour:
     m_Value: 55261.973
   aerosolDensity:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 0.01192826
   aerosolTint:
     m_OverrideState: 1
     m_Value: {r: 0.9, g: 0.9, b: 0.9, a: 1}
@@ -96,19 +96,19 @@ MonoBehaviour:
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   groundColorTexture:
     m_OverrideState: 1
-    m_Value: {fileID: 8900000, guid: 1a5e03bae5d7a944384f0c7beb895865, type: 3}
+    m_Value: {fileID: 0}
   groundEmissionTexture:
     m_OverrideState: 1
-    m_Value: {fileID: 8900000, guid: 8962c67a9f059ac4ca26fb6ce20b3c15, type: 3}
+    m_Value: {fileID: 0}
   groundEmissionMultiplier:
     m_OverrideState: 1
     m_Value: 1
   planetRotation:
     m_OverrideState: 1
-    m_Value: {x: 0, y: 0, z: 61.84}
+    m_Value: {x: 0, y: 0, z: 0}
   spaceEmissionTexture:
     m_OverrideState: 1
-    m_Value: {fileID: 8900000, guid: 6a109394e3869424792ee88d9a4994ac, type: 3}
+    m_Value: {fileID: 0}
   spaceEmissionMultiplier:
     m_OverrideState: 1
     m_Value: 1

@@ -256,7 +256,7 @@ namespace UnityEssentials
         private float GetMoonEarthshine()
         {
             const float minEarthshine = 0.01f;
-            return Mathf.Max(minEarthshine, 1 - SpaceWeight);
+            return minEarthshine * SpaceWeight;
         }
 
 #if UNITY_EDITOR
