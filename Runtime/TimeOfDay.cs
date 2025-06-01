@@ -178,7 +178,7 @@ namespace UnityEssentials
                 SkyMaterial?.SetMatrix(s_earthPropertyID, GetRotationMatrix(earthSolarRotation, earthRotationOffset));
 
 #if UNITY_EDITOR
-                //if (!Application.isPlaying)
+                if (!Application.isPlaying)
                 {
                     SunLight.transform.rotation = _sunRotation;
                     MoonLight.transform.rotation = _moonRotation;
@@ -272,15 +272,16 @@ namespace UnityEssentials
                     Gizmos.DrawRay(SunLight.transform.position, -SunLight.transform.forward * 2.3f);
                     Gizmos.DrawSphere(SunLight.transform.position - SunLight.transform.forward * 2.3f, 0.2f);
 
-                    //Handles.Label(SunLight.transform.position - SunLight.transform.forward * 2.3f + Vector3.up * 0.5f, "Sun");
+                    Handles.Label(SunLight.transform.position - SunLight.transform.forward * 2.3f + Vector3.up * 0.35f, "Sun");
                 }
+
                 if (MoonLight != null)
                 {
                     Gizmos.color = Color.white;
                     Gizmos.DrawRay(MoonLight.transform.position, -MoonLight.transform.forward * 2f);
                     Gizmos.DrawSphere(MoonLight.transform.position - MoonLight.transform.forward * 2f, 0.1f);
 
-                    //Handles.Label(MoonLight.transform.position - MoonLight.transform.forward * 2f + Vector3.up * 0.5f, "Moon");
+                    Handles.Label(MoonLight.transform.position - MoonLight.transform.forward * 2f + Vector3.up * 0.25f, "Moon");
                 }
 
                 {
@@ -289,7 +290,8 @@ namespace UnityEssentials
                         .GetGalacticUpDirection(DateTime, Latitude, Longitude).ToVector3();
                     Gizmos.DrawRay(transform.position, galacticUp * 2f);
                     Gizmos.DrawSphere(transform.position + galacticUp * 2f, 0.1f);
-                    //Handles.Label(transform.position + galacticUp * 2f + Vector3.up * 0.5f, "Galactic Up");
+
+                    Handles.Label(transform.position + galacticUp * 2f + Vector3.up * 0.25f, "Galactic Up");
                 }
             }
         }
