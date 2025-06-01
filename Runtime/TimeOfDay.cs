@@ -178,7 +178,7 @@ namespace UnityEssentials
                 SkyMaterial?.SetMatrix(s_earthPropertyID, GetRotationMatrix(earthSolarRotation, earthRotationOffset));
 
 #if UNITY_EDITOR
-                if (!Application.isPlaying)
+                //if (!Application.isPlaying)
                 {
                     SunLight.transform.rotation = _sunRotation;
                     MoonLight.transform.rotation = _moonRotation;
@@ -200,7 +200,7 @@ namespace UnityEssentials
             IsDay = CelestialLightingController.IsSunLightAboveHorizon;
 
             const float nauticalTwilight = 0.1f;
-            DayWeight = Mathf.Clamp01(Vector3.Dot(-SunLight.transform.forward, Vector3.up).Remap(-0.1f, nauticalTwilight, 0, 1));
+            DayWeight = Mathf.Clamp01(Vector3.Dot(-SunLight.transform.forward, Vector3.up).Remap(0, nauticalTwilight, 0, 1));
 
             if (NightVolume != null)
                 NightVolume.weight = NightWeight;
