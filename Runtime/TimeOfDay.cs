@@ -196,11 +196,11 @@ namespace UnityEssentials
             // Prefer SceneView camera if available and focused
             var sceneView = SceneView.lastActiveSceneView;
             if (sceneView != null && sceneView.camera != null && sceneView.hasFocus)
-                return Mathf.Max(100, sceneView.camera.transform.position.y);
+                return Mathf.Max(100, sceneView.camera.transform.position.magnitude);
 #endif
             // Fallback to main camera
             if (Camera.main != null)
-                return Mathf.Max(100, Camera.main.transform.position.y);
+                return Mathf.Max(100, Camera.main.transform.position.magnitude);
 
             return 0f;
         }
