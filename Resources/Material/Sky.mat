@@ -124,7 +124,7 @@ Material:
     - _Smoothness: 0.3
     - _SpaceWeight: 0.001
     - _Star_Correction_Intensity: 10
-    - _Star_Correction_Weight: 1
+    - _Star_Correction_Weight: 0
     - _Star_Intensity_Correction: 10
     - _Stars_Brightness: 0.33
     - _Stars_High_Density_Amount: 1

@@ -61,8 +61,8 @@ namespace UnityEssentials
         public float DayWeight { get; private set; }
         public float NightWeight => 1 - DayWeight;
         public float SpaceWeight { get; private set; }
-        public float CameraElevation { get; private set; }
         public Vector3 GalacticUp { get; private set; }
+        public float CameraHeight { get; private set; }
 
         [field: SerializeField] public SunProperties SunProperties { get; private set; }
         [field: SerializeField] public MoonProperties MoonProperties { get; private set; }
@@ -112,11 +112,9 @@ namespace UnityEssentials
 
         private const string SkyPropertyName = "_RotationMatrix";
         private const string EarthPropertyName = "_EarthRotationMatrix";
-        private const string StarWeightPropertyName = "_Star_Correction_Weight";
         private const string SpaceWeightName = "_SpaceWeight";
         private static readonly int s_earthPropertyID = Shader.PropertyToID(EarthPropertyName);
         private static readonly int s_skyPropertyID = Shader.PropertyToID(SkyPropertyName);
-        private static readonly int s_starWeightPropertyID = Shader.PropertyToID(StarWeightPropertyName);
         private static readonly int s_spaceWeightPropertyID = Shader.PropertyToID(SpaceWeightName);
         private Quaternion _sunRotation;
         private Quaternion _moonRotation;
@@ -132,8 +130,8 @@ namespace UnityEssentials
             var solarUp = CelestialBodiesCalculator.GetSolarSystemUpDirection(GetTime(), Latitude, Longitude).ToVector3();
 
             GalacticUp = galacticUp.normalized;
-            CameraElevation = GetCurrentRenderingCameraHeight();
             SpaceWeight = GetSpaceWeight();
+            CameraHeight = GetCurrentRenderingCameraHeight();
 
             if (SunLight != null && MoonLight != null && SkyMaterial != null)
             {
@@ -147,7 +145,6 @@ namespace UnityEssentials
                 _skyRotation = CalculateCelestialRotation(sunDirection, galacticUp);
                 _skyRotationLerped = Quaternion.Lerp(_skyRotationLerped, _skyRotation, Time.deltaTime);
                 SkyMaterial?.SetMatrix(s_skyPropertyID, GetRotationMatrix(_skyRotationLerped));
-                SkyMaterial?.SetFloat(s_starWeightPropertyID, DayWeight);
                 SkyMaterial?.SetFloat(s_spaceWeightPropertyID, SpaceWeight);
 
                 var earthSolarRotation = CalculateCelestialRotation(sunStaticDirection, solarUp);
@@ -179,7 +176,7 @@ namespace UnityEssentials
             DayWeight = Mathf.Clamp01(Vector3.Dot(-SunLight.transform.forward, Vector3.up).Remap(0, nauticalTwilight, 0, 1));
 
             if (NightVolume != null)
-                NightVolume.weight = NightWeight;
+                NightVolume.weight = Mathf.Max(NightWeight, SpaceWeight);
         }
 
         private Quaternion CalculateCelestialRotation(Vector3 direction, Vector3 up) =>
@@ -211,7 +208,7 @@ namespace UnityEssentials
         private float GetSpaceWeight()
         {
             const float outerspaceThreshold = 100_000f;
-            return Mathf.Clamp01(CameraElevation / outerspaceThreshold);
+            return Mathf.Clamp01(CameraHeight / outerspaceThreshold);
         }
 
         private float GetMoonEarthshine()
@@ -223,7 +220,7 @@ namespace UnityEssentials
 #if UNITY_EDITOR
         public void OnDrawGizmosSelected()
         {
-            if (CameraElevation > 1000)
+            if (CameraHeight > 1000)
                 Handles.Label(transform.position, "o");
             else
             {
