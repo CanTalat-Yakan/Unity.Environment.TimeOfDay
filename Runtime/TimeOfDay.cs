@@ -124,7 +124,7 @@ namespace UnityEssentials
         private Quaternion _sunRotation;
         private Quaternion _moonRotation;
         private Quaternion _skyRotation;
-        private Quaternion _skyRotationLerped;
+        private Quaternion _skyRotationLerped = Quaternion.identity;
         private Vector3 _earthRotationOffset = new Vector3(164.5f, 20.5f, 12.25f);
         private void UpdateCelestialTargets()
         {

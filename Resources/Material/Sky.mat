@@ -122,7 +122,7 @@ Material:
     - _Saturation_Shift: 0.794
     - _Skybox_Strength: 35.33
     - _Smoothness: 0.3
-    - _SpaceWeight: 0.00422094
+    - _SpaceWeight: 0.015940674
     - _Star_Correction_Intensity: 10
     - _Star_Correction_Weight: 0
     - _Star_Intensity_Correction: 10
