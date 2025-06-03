@@ -62,7 +62,10 @@ namespace UnityEssentials
         public float NightWeight => 1 - DayWeight;
         public float SpaceWeight { get; private set; }
         public Vector3 GalacticUp { get; private set; }
+        public float CameraDistance { get; private set; }
         public float CameraHeight { get; private set; }
+
+        public float CloudCoverage { get; set; }
 
         [field: SerializeField] public SunProperties SunProperties { get; private set; }
         [field: SerializeField] public MoonProperties MoonProperties { get; private set; }
@@ -99,6 +102,8 @@ namespace UnityEssentials
 
         void Update()
         {
+            GetCurrentRenderingCameraInfo();
+
             GetCurrentTimeUTC();
             UpdateCelestialTargets();
         }
@@ -110,7 +115,7 @@ namespace UnityEssentials
         private DateTime GetTime() =>
             _staticDateTime ??= new DateTime(Date.x, Date.y, Date.z, 0, 0, 0, DateTimeKind.Utc);
 
-        private const string SkyPropertyName = "_RotationMatrix";
+        private const string SkyPropertyName = "_SkyRotationMatrix";
         private const string EarthPropertyName = "_EarthRotationMatrix";
         private const string SpaceWeightName = "_SpaceWeight";
         private static readonly int s_earthPropertyID = Shader.PropertyToID(EarthPropertyName);
@@ -131,7 +136,6 @@ namespace UnityEssentials
 
             GalacticUp = galacticUp.normalized;
             SpaceWeight = GetSpaceWeight();
-            CameraHeight = GetCurrentRenderingCameraHeight();
 
             if (SunLight != null && MoonLight != null && SkyMaterial != null)
             {
@@ -163,7 +167,7 @@ namespace UnityEssentials
             SunProperties = CelestialBodiesCalculator.GetSunProperties(DateTime, Latitude, Longitude);
             MoonProperties = CelestialBodiesCalculator.GetMoonProperties(DateTime, Latitude, Longitude);
 
-            CelestialLightingController.UpdateLightProperties(SunLight, MoonLight, SunProperties, MoonProperties, SpaceWeight);
+            CelestialLightingController.UpdateLightProperties(SunLight, MoonLight, SunProperties, MoonProperties, SpaceWeight, CloudCoverage);
 
             if (IsNight && CelestialLightingController.IsSunLightAboveHorizon)
                 DayEvents?.Invoke();
@@ -190,25 +194,31 @@ namespace UnityEssentials
             return Matrix4x4.Rotate(finalRotation).inverse;
         }
 
-        private float GetCurrentRenderingCameraHeight()
+        private void GetCurrentRenderingCameraInfo()
         {
 #if UNITY_EDITOR
             // Prefer SceneView camera if available and focused
             var sceneView = SceneView.lastActiveSceneView;
             if (sceneView != null && sceneView.camera != null && sceneView.hasFocus)
-                return Mathf.Max(100, sceneView.camera.transform.position.magnitude);
+            {
+                CameraDistance = sceneView.camera.transform.position.magnitude;
+                CameraHeight = sceneView.camera.transform.position.y;
+                return;
+            }
 #endif
             // Fallback to main camera
             if (Camera.main != null)
-                return Mathf.Max(100, Camera.main.transform.position.magnitude);
-
-            return 0f;
+            {
+                CameraDistance = Camera.main.transform.position.magnitude;
+                CameraHeight = Camera.main.transform.position.y;
+                return;
+            }
         }
 
         private float GetSpaceWeight()
         {
             const float outerspaceThreshold = 100_000f;
-            return Mathf.Clamp01(CameraHeight / outerspaceThreshold);
+            return Mathf.Clamp01(CameraDistance / outerspaceThreshold);
         }
 
         private float GetMoonEarthshine()
@@ -221,7 +231,7 @@ namespace UnityEssentials
 #if UNITY_EDITOR
         public void OnDrawGizmosSelected()
         {
-            if (CameraHeight > 1000)
+            if (CameraDistance > 1000)
                 Handles.Label(transform.position, "o");
             else
             {

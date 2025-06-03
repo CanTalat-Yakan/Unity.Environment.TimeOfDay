@@ -142,8 +142,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 1
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 67669.45
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 67726.61
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -186,7 +186,7 @@ Light:
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 0.5, y: 0.5}
   m_BounceIntensity: 1
-  m_ColorTemperature: 6500
+  m_ColorTemperature: 5500
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: -0.0000000028438265, z: 6.07e-43, w: 5.3e-44}
   m_UseBoundingSphereOverride: 0
@@ -353,7 +353,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LensFlareData: {fileID: 11400000, guid: bd7eaf3bd49c39f4cb77bd809459aa72, type: 2}
   version: 0
-  intensity: 0.56447405
+  intensity: 0.564388
   maxAttenuationDistance: 100
   maxAttenuationScale: 100
   distanceAttenuationCurve:
@@ -608,8 +608,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0
+  m_Color: {r: 0.34856516, g: 0.3766687, b: 0.45258883, a: 1}
+  m_Intensity: 0.13503863
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
