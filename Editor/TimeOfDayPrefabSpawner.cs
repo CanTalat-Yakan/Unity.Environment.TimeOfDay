@@ -6,7 +6,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 namespace UnityEssentials
 {
-    public class TimeOfDayEditor
+    public class TimeOfDayPrefabSpawner
     {
         [MenuItem("GameObject/Essentials/Time of Day", false, priority = 100)]
         private static void InstantiateTimeOfDay(MenuCommand menuCommand)
