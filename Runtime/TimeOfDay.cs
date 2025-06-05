@@ -62,8 +62,6 @@ namespace UnityEssentials
         public float NightWeight => 1 - DayWeight;
         public float SpaceWeight { get; private set; }
         public Vector3 GalacticUp { get; private set; }
-        public float CameraDistance { get; private set; }
-        public float CameraHeight { get; private set; }
 
         public float CloudCoverage { get; set; }
 
@@ -102,8 +100,6 @@ namespace UnityEssentials
 
         void Update()
         {
-            GetCurrentRenderingCameraInfo();
-
             GetCurrentTimeUTC();
             UpdateCelestialTargets();
         }
@@ -194,31 +190,10 @@ namespace UnityEssentials
             return Matrix4x4.Rotate(finalRotation).inverse;
         }
 
-        private void GetCurrentRenderingCameraInfo()
-        {
-#if UNITY_EDITOR
-            // Prefer SceneView camera if available and focused
-            var sceneView = SceneView.lastActiveSceneView;
-            if (sceneView != null && sceneView.camera != null && sceneView.hasFocus)
-            {
-                CameraDistance = sceneView.camera.transform.position.magnitude;
-                CameraHeight = sceneView.camera.transform.position.y;
-                return;
-            }
-#endif
-            // Fallback to main camera
-            if (Camera.main != null)
-            {
-                CameraDistance = Camera.main.transform.position.magnitude;
-                CameraHeight = Camera.main.transform.position.y;
-                return;
-            }
-        }
-
         private float GetSpaceWeight()
         {
             const float outerspaceThreshold = 100_000f;
-            return Mathf.Clamp01(CameraDistance / outerspaceThreshold);
+            return Mathf.Clamp01(CameraProvider.Distance / outerspaceThreshold);
         }
 
         private float GetMoonEarthshine()
@@ -231,7 +206,7 @@ namespace UnityEssentials
 #if UNITY_EDITOR
         public void OnDrawGizmosSelected()
         {
-            if (CameraDistance > 1000)
+            if (CameraProvider.Distance > 1000)
                 Handles.Label(transform.position, "o");
             else
             {
