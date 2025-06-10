@@ -1,17 +1,33 @@
 {
-    "name": "com.unityessentials.timeofday",
-    "version": "1.0.0",
-    "displayName": "UnityEssentials TimeOfDay",
-    "description": "This is a part of the UnityEssentials Ecosystem",
-    "unity": "2022.1",
-    "documentationUrl": "",
-    "changelogUrl": "",
-    "licensesUrl": "",
-    "dependencies": " { "com.unityessentials.core": "1.0.0" } ",
-    "keywords": [],
-    "author": {
-        "name": "Unity Essentials",
-        "email": "",
-        "url": ""
-    }
+  "name": "com.unityessentials.timeofday",
+  "version": "1.0.0",
+  "displayName": "UnityEssentials TimeOfDay",
+  "description": "This is a part of the UnityEssentials Ecosystem",
+  "unity": "2022.1",
+  "unityRelease": null,
+  "dependencies": {
+    "com.unityessentials.core": "1.0.0",
+    "com.unity.render-pipelines.high-definition": "17.1.0",
+    "com.unityessentials.prefabspawner": "1.0.0",
+    "com.unityessentials.apvlightingbaker": "1.0.0",
+    "com.unityessentials.onvaluechangedattribute": "1.0.0",
+    "com.unityessentials.dateattribute": "1.0.0",
+    "com.unityessentials.readonlyattribute": "1.0.0",
+    "com.unityessentials.buttonattribute": "1.0.0",
+    "com.unityessentials.utilityextensions": "1.0.0",
+    "com.unityessentials.celestialcoordinates": "1.0.0",
+    "com.unityessentials.cameraprovider": "1.0.0",
+    "com.unityessentials.singleton": "1.0.0"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Unity Essentials",
+    "email": "",
+    "url": ""
+  },
+  "documentationUrl": "",
+  "changelogUrl": "",
+  "licensesUrl": "",
+  "samples": [],
+  "hideInEditor": true
 }
