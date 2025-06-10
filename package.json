@@ -8,7 +8,7 @@
   "dependencies": {
     "com.unityessentials.core": "1.0.0",
     "com.unity.render-pipelines.high-definition": "17.1.0",
-    "com.unityessentials.prefabspawner": "1.0.0",
+    "com.unityessentials.resourceloader": "1.0.0",
     "com.unityessentials.apvlightingbaker": "1.0.0",
     "com.unityessentials.onvaluechangedattribute": "1.0.0",
     "com.unityessentials.dateattribute": "1.0.0",
