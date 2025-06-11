@@ -120,9 +120,10 @@ Material:
     - _Projector_Width: 0.001
     - _Rotation: 90
     - _Saturation_Shift: 0.794
+    - _ScalePerlin: 0
     - _Skybox_Strength: 35.33
     - _Smoothness: 0.3
-    - _SpaceWeight: 0
+    - _SpaceWeight: 0.00008257932
     - _Star_Correction_Intensity: 10
     - _Star_Correction_Weight: 0
     - _Star_Intensity_Correction: 10
@@ -137,7 +138,7 @@ Material:
     - _Euler: {r: -0.18847895, g: 0.9535064, b: 0.071557984, a: 0.2240105}
     - _EulerAnglesRotation: {r: 1, g: 1, b: 1, a: 0}
     - _Global_Speed: {r: 0.01, g: -0.001, b: 0, a: 0}
-    - _Ground_Emission_Color: {r: 1, g: 0.7149791, b: 0.4575472, a: 1}
+    - _Ground_Emission_Color: {r: 23.96863, g: 17.13707, b: 10.966779, a: 1}
     - _Noise_Speed: {r: -0.02, g: 0.002, b: 0, a: 0}
     - _Northern_Lights_Colors: {r: 0.5254902, g: 1, b: 0.6980392, a: 0}
     - _Northern_Lights_Global_Speed: {r: 0.01, g: -0.001, b: 0, a: 0}
