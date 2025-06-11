@@ -165,6 +165,8 @@ namespace UnityEssentials
 
             CelestialLightingController.UpdateLightProperties(SunLight, MoonLight, SunProperties, MoonProperties, SpaceWeight, CloudCoverage);
 
+            MoonLightData.surfaceTint = MoonLight.color;
+
             if (IsNight && CelestialLightingController.IsSunLightAboveHorizon)
                 DayEvents?.Invoke();
             else if (IsDay && !CelestialLightingController.IsSunLightAboveHorizon)

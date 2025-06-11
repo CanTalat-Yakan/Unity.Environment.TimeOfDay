@@ -143,7 +143,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 67726.61
+  m_Intensity: 67736.89
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -353,7 +353,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LensFlareData: {fileID: 11400000, guid: bd7eaf3bd49c39f4cb77bd809459aa72, type: 2}
   version: 0
-  intensity: 0.564388
+  intensity: 0.56447405
   maxAttenuationDistance: 100
   maxAttenuationScale: 100
   distanceAttenuationCurve:
@@ -609,7 +609,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 0.34856516, g: 0.3766687, b: 0.45258883, a: 1}
-  m_Intensity: 0.13503863
+  m_Intensity: 0.13505922
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -723,7 +723,7 @@ MonoBehaviour:
   flareSize: 0
   flareTint: {r: 1, g: 1, b: 1, a: 1}
   flareFalloff: 4
-  flareMultiplier: 1
+  flareMultiplier: 0
   surfaceTexture: {fileID: 2800000, guid: 9f06700a2919226428822448654a8321, type: 3}
   surfaceTint: {r: 1, g: 1, b: 1, a: 1}
   m_Distance: 384400000
