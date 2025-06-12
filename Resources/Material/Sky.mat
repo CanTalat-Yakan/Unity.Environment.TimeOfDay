@@ -60,6 +60,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 1eaec72f13969f54faa3af66e08842ed, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Star_Cubemap:
+        m_Texture: {fileID: 8900000, guid: 6a109394e3869424792ee88d9a4994ac, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Stars_3D_texture:
         m_Texture: {fileID: 11700000, guid: 3cb13f09c6aaea547a6dc09f1268f61e, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -123,9 +127,11 @@ Material:
     - _ScalePerlin: 0
     - _Skybox_Strength: 35.33
     - _Smoothness: 0.3
-    - _SpaceWeight: 0.00008257932
+    - _SpaceWeight: 0.0045471187
     - _Star_Correction_Intensity: 10
     - _Star_Correction_Weight: 0
+    - _Star_Cubemap_Power: 1.3
+    - _Star_Cubemap_Strength: 1
     - _Star_Intensity_Correction: 10
     - _Stars_Brightness: 0.33
     - _Stars_High_Density_Amount: 1
@@ -146,6 +152,7 @@ Material:
     - _Projector_Altitude: {r: 0, g: 0, b: 0, a: 0}
     - _Quaternion: {r: 347.23782, g: 155.77292, b: 340.38702, a: 0}
     - _QuaternionRotation: {r: -0.42169756, g: -0.2855637, b: 0.14186902, a: -0.8488214}
+    - _Sky_Emission_Color: {r: 0.019607844, g: 0.019607844, b: 0.019607844, a: 1}
     - _Vertical_Rotation: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

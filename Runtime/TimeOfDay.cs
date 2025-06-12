@@ -59,7 +59,7 @@ namespace UnityEssentials
         public bool IsDay { get; private set; }
         public bool IsNight => !IsDay;
         public float DayWeight { get; private set; }
-        public float NightWeight => 1 - DayWeight;
+        public float NightWeight { get; private set; }
         public float SpaceWeight { get; private set; }
         public Vector3 GalacticUp { get; private set; }
 
@@ -173,9 +173,11 @@ namespace UnityEssentials
                 NightEvents?.Invoke();
 
             IsDay = CelestialLightingController.IsSunLightAboveHorizon;
-
+            
             const float nauticalTwilight = 0.1f;
-            DayWeight = Mathf.Clamp01(Vector3.Dot(-SunLight.transform.forward, Vector3.up).Remap(0, nauticalTwilight, 0, 1));
+            const float astronomicalTwilight = 0.2f;
+            DayWeight = Mathf.Clamp01(Vector3.Dot(-SunLight.transform.forward, Vector3.up).Remap(nauticalTwilight, astronomicalTwilight, 0, 1));
+            NightWeight = Mathf.Clamp01(Vector3.Dot(-SunLight.transform.forward, Vector3.up).Remap(-astronomicalTwilight, -nauticalTwilight, 1, 0));
 
             if (NightVolume != null)
                 NightVolume.weight = Mathf.Max(NightWeight, SpaceWeight);

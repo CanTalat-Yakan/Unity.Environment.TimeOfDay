@@ -229,7 +229,7 @@ MonoBehaviour:
   active: 1
   postExposure:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 2.5
   contrast:
     m_OverrideState: 0
     m_Value: 0
@@ -281,9 +281,9 @@ MonoBehaviour:
     m_Value: 1
   lutTexture:
     m_OverrideState: 1
-    m_Value: {fileID: 11700000, guid: ec79ebf7d1d2ed54ea0a78c594cd4bfc, type: 3}
+    m_Value: {fileID: 11700000, guid: 33dcfc7fabe6edb4baf853878499f391, type: 3}
   lutContribution:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   neutralHDRRangeReductionMode:
     m_OverrideState: 0
