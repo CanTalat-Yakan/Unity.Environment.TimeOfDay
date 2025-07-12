@@ -11,7 +11,9 @@ namespace UnityEssentials
     public class TimeOfDayAPVLightingScenarioBlender : MonoBehaviour
     {
         [HideInInspector] public TimeOfDay TimeOfDay;
+#if UNITY_EDITOR
         public APVLightingBaker LightingScenarioBaker;
+#endif
 
         [Space]
         [ReadOnly] public int LightingScenarioCount;
@@ -26,9 +28,7 @@ namespace UnityEssentials
 
         public void Awake()
         {
-
             TimeOfDay = GetComponent<TimeOfDay>();
-            LightingScenarioBaker = GetComponent<APVLightingBaker>();
 
             ProbeReferenceVolumeProvider.AddListener(() =>
                 FetchLightingScenarios(out _scenarioNames, out _scenarioTimes, out LightingScenarioCount));
@@ -41,7 +41,10 @@ namespace UnityEssentials
         public void BakeCurrentTimeLightingScenario()
         {
             var name = GetLightingScenarioName(TimeOfDay.DateTime, TimeOfDay.UTCOffset);
+
+#if UNITY_EDITOR
             LightingScenarioBaker.BakeLightingScenario(name);
+#endif
 
             FetchLightingScenarios(out _scenarioNames, out _scenarioTimes, out LightingScenarioCount);
         }
