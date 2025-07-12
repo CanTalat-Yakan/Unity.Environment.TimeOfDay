@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,12 +9,10 @@ namespace UnityEssentials
 {
     [ExecuteAlways]
     [RequireComponent(typeof(TimeOfDay))]
-    public class TimeOfDayAPVLightingScenarioBlender : MonoBehaviour
+    public class TimeOfDayLightingScenarioBlender : MonoBehaviour
     {
         [HideInInspector] public TimeOfDay TimeOfDay;
-#if UNITY_EDITOR
         public APVLightingBaker LightingScenarioBaker;
-#endif
 
         [Space]
         [ReadOnly] public int LightingScenarioCount;
@@ -42,9 +41,7 @@ namespace UnityEssentials
         {
             var name = GetLightingScenarioName(TimeOfDay.DateTime, TimeOfDay.UTCOffset);
 
-#if UNITY_EDITOR
             LightingScenarioBaker.BakeLightingScenario(name);
-#endif
 
             FetchLightingScenarios(out _scenarioNames, out _scenarioTimes, out LightingScenarioCount);
         }
@@ -220,3 +217,4 @@ namespace UnityEssentials
         }
     }
 }
+#endif
