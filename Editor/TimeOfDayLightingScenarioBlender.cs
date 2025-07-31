@@ -1,12 +1,21 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Linq;
-#if UNITY_EDITOR
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace UnityEssentials
 {
+    [Serializable]
+    public class BlendProperties
+    {
+        [ReadOnly] public int LightingScenarioCount;
+        [ReadOnly] public string CurrentLightingScenario;
+        [ReadOnly] public string NextLightingScenario;
+        [ReadOnly] public float CurrentBlendFactor;
+    }
+
     [ExecuteAlways]
     [RequireComponent(typeof(TimeOfDay))]
     public class TimeOfDayLightingScenarioBlender : MonoBehaviour
@@ -14,11 +23,8 @@ namespace UnityEssentials
         [HideInInspector] public TimeOfDay TimeOfDay;
         public APVLightingBaker LightingScenarioBaker;
 
-        [Space]
-        [ReadOnly] public int LightingScenarioCount;
-        [ReadOnly] public string CurrentLightingScenario;
-        [ReadOnly] public string NextLightingScenario;
-        [ReadOnly] public float CurrentBlendFactor;
+        [field: Space]
+        [field: SerializeField] public BlendProperties BlendProperties { get; private set; } = new();
 
         private int _numberOfCellsBlendedPerFrame = 10000;
 
@@ -30,7 +36,7 @@ namespace UnityEssentials
             TimeOfDay = GetComponent<TimeOfDay>();
 
             ProbeReferenceVolumeProvider.AddListener(() =>
-                FetchLightingScenarios(out _scenarioNames, out _scenarioTimes, out LightingScenarioCount));
+                FetchLightingScenarios(out _scenarioNames, out _scenarioTimes, out BlendProperties.LightingScenarioCount));
         }
 
         public void Update() =>
@@ -43,7 +49,7 @@ namespace UnityEssentials
 
             LightingScenarioBaker.BakeLightingScenario(name);
 
-            FetchLightingScenarios(out _scenarioNames, out _scenarioTimes, out LightingScenarioCount);
+            FetchLightingScenarios(out _scenarioNames, out _scenarioTimes, out BlendProperties.LightingScenarioCount);
         }
 
         private void UpdateBlend(double currentTimeInHours)
@@ -51,21 +57,21 @@ namespace UnityEssentials
             if (!ProbeReferenceVolumeProvider.IsInitialized)
                 return;
 
-            if (LightingScenarioCount == 0)
+            if (BlendProperties.LightingScenarioCount == 0)
             {
                 // No scenarios available
-                CurrentLightingScenario = null;
-                NextLightingScenario = null;
-                CurrentBlendFactor = 0f;
+                BlendProperties.CurrentLightingScenario = null;
+                BlendProperties.NextLightingScenario = null;
+                BlendProperties.CurrentBlendFactor = 0f;
                 return;
             }
 
-            if (LightingScenarioCount == 1)
+            if (BlendProperties.LightingScenarioCount == 1)
             {
                 // Only one scenario available
-                CurrentLightingScenario = _scenarioNames[0];
-                NextLightingScenario = _scenarioNames[0];
-                CurrentBlendFactor = 0f;
+                BlendProperties.CurrentLightingScenario = _scenarioNames[0];
+                BlendProperties.NextLightingScenario = _scenarioNames[0];
+                BlendProperties.CurrentBlendFactor = 0f;
                 return;
             }
 
@@ -73,14 +79,14 @@ namespace UnityEssentials
             double nextScenarioTime = -1;
 
             // Iterate through scenarios to find the current interval
-            for (int i = 0; i < LightingScenarioCount; i++)
+            for (int i = 0; i < BlendProperties.LightingScenarioCount; i++)
             {
                 double currentTime = _scenarioTimes[i];
                 double followingTime;
 
                 // If then determine the next scenario, looping back to the first if at the end
                 // else last scenario loops to the first scenario
-                followingTime = (i < LightingScenarioCount - 1) ? _scenarioTimes[i + 1] : _scenarioTimes[0];
+                followingTime = (i < BlendProperties.LightingScenarioCount - 1) ? _scenarioTimes[i + 1] : _scenarioTimes[0];
 
                 // Check if current time falls within the interval
                 if (IsTimeWithinInterval(currentTimeInHours, currentTime, followingTime))
@@ -94,7 +100,7 @@ namespace UnityEssentials
             // If no interval was found, default to the last and first scenarios
             if (previousScenarioTime == -1 || nextScenarioTime == -1)
             {
-                previousScenarioTime = _scenarioTimes[LightingScenarioCount - 1];
+                previousScenarioTime = _scenarioTimes[BlendProperties.LightingScenarioCount - 1];
                 nextScenarioTime = _scenarioTimes[0];
             }
 
@@ -103,9 +109,9 @@ namespace UnityEssentials
             if (totalTimeDifference <= 0)
             {
                 // Prevent division by zero or negative blending
-                CurrentLightingScenario = _scenarioNames[Array.IndexOf(_scenarioTimes, previousScenarioTime)];
-                NextLightingScenario = _scenarioNames[Array.IndexOf(_scenarioTimes, previousScenarioTime)];
-                CurrentBlendFactor = 0f;
+                BlendProperties.CurrentLightingScenario = _scenarioNames[Array.IndexOf(_scenarioTimes, previousScenarioTime)];
+                BlendProperties.NextLightingScenario = _scenarioNames[Array.IndexOf(_scenarioTimes, previousScenarioTime)];
+                BlendProperties.CurrentBlendFactor = 0f;
                 return;
             }
 
@@ -113,12 +119,12 @@ namespace UnityEssentials
             float blendFactor = Mathf.Clamp01((float)(elapsedTime / totalTimeDifference));
 
             // Update current and next scenarios with blend factor
-            CurrentLightingScenario = _scenarioNames[Array.IndexOf(_scenarioTimes, previousScenarioTime)];
-            NextLightingScenario = _scenarioNames[Array.IndexOf(_scenarioTimes, nextScenarioTime)];
-            CurrentBlendFactor = blendFactor;
+            BlendProperties.CurrentLightingScenario = _scenarioNames[Array.IndexOf(_scenarioTimes, previousScenarioTime)];
+            BlendProperties.NextLightingScenario = _scenarioNames[Array.IndexOf(_scenarioTimes, nextScenarioTime)];
+            BlendProperties.CurrentBlendFactor = blendFactor;
 
             ApplyQuality(_numberOfCellsBlendedPerFrame);
-            ApplyBlend(CurrentLightingScenario, NextLightingScenario, blendFactor);
+            ApplyBlend(BlendProperties.CurrentLightingScenario, BlendProperties.NextLightingScenario, blendFactor);
         }
 
         private void ApplyQuality(int numberOfCellsBlendedPerFrame)
