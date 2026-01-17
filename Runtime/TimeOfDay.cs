@@ -104,7 +104,7 @@ namespace UnityEssentials
             UpdateCelestialTargets();
         }
 
-        private void GetCurrentTimeUTC() =>
+        public DateTime GetCurrentTimeUTC() =>
             DateTime = GetTime().AddHours(TimeInHours - UTCOffset);
 
         private DateTime? _staticDateTime;

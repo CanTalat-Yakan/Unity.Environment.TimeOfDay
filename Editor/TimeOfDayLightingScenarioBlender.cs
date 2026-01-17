@@ -2,8 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEditor;
+using UnityEditor.SceneManagement;
 
 namespace UnityEssentials
 {
@@ -23,20 +26,23 @@ namespace UnityEssentials
         [HideInInspector] public TimeOfDay TimeOfDay;
         public APVLightingBaker LightingScenarioBaker;
 
-        [field: Space]
-        [field: SerializeField] public BlendProperties BlendProperties { get; private set; } = new();
+        [field: Space] [field: SerializeField] public BlendProperties BlendProperties { get; private set; } = new();
 
         private int _numberOfCellsBlendedPerFrame = 10000;
 
         private string[] _scenarioNames = null;
         private double[] _scenarioTimes = null;
 
+        // Bake runner state (editor only)
+        private bool _isBaking24Hours;
+
         public void Awake()
         {
             TimeOfDay = GetComponent<TimeOfDay>();
 
             ProbeReferenceVolumeProvider.AddListener(() =>
-                FetchLightingScenarios(out _scenarioNames, out _scenarioTimes, out BlendProperties.LightingScenarioCount));
+                FetchLightingScenarios(out _scenarioNames, out _scenarioTimes,
+                    out BlendProperties.LightingScenarioCount));
         }
 
         public void Update() =>
@@ -47,15 +53,82 @@ namespace UnityEssentials
         {
             var name = GetLightingScenarioName(TimeOfDay.DateTime, TimeOfDay.UTCOffset);
 
-            LightingScenarioBaker.BakeLightingScenario(name);
+            LightingScenarioBaker.BakeLightingScenario(name, async: true);
 
             FetchLightingScenarios(out _scenarioNames, out _scenarioTimes, out BlendProperties.LightingScenarioCount);
+        }
+
+        [Button("Bake 24 Hours")]
+        public async void Bake24HourLightingScenario(bool skipOddHours = true)
+        {
+            for (int hour = 0; hour < 24; hour++)
+            {
+                if (skipOddHours && (hour % 2 == 1))
+                    continue;
+
+                TimeOfDay.TimeInHours = hour;
+
+                // In edit mode, mark dirty so dependent systems update consistently
+                if (!Application.isPlaying)
+                    EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+
+                // Let one editor frame pass so TimeOfDay.Update runs and DateTime reflects the new hour
+                await WaitForEditorUpdate();
+
+                var scenarioName = GetLightingScenarioName(TimeOfDay.GetCurrentTimeUTC(), TimeOfDay.UTCOffset);
+
+                bool started = LightingScenarioBaker.BakeLightingScenario(scenarioName, async: true);
+                if (!started)
+                {
+                    Debug.LogWarning($"Failed to start baking scenario '{scenarioName}'. Aborting batch bake.");
+                    return;
+                }
+
+                await WaitForBakeToFinish();
+            }
+
+            FetchLightingScenarios(out _scenarioNames, out _scenarioTimes, out BlendProperties.LightingScenarioCount);
+            Debug.Log("Bake 24 Hours finished.");
+        }
+
+        private static Task WaitForEditorUpdate()
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            void Tick()
+            {
+                EditorApplication.update -= Tick;
+                tcs.TrySetResult(true);
+            }
+
+            EditorApplication.update += Tick;
+            return tcs.Task;
+        }
+
+        private static async Task WaitForBakeToFinish()
+        {
+            // Bake starts asynchronously; wait until Unity flips Lightmapping.isRunning true
+            while (!APVLightingBaker.IsBakingInProgress)
+                await WaitForEditorUpdate();
+
+            // Then wait until it's done
+            while (APVLightingBaker.IsBakingInProgress)
+                await WaitForEditorUpdate();
+        }
+
+        private void OnDisable()
+        {
+            // Ensure we don't keep state in case of recompiles/domain reloads
+            _isBaking24Hours = false;
         }
 
         private void UpdateBlend(double currentTimeInHours)
         {
             if (!ProbeReferenceVolumeProvider.IsInitialized)
                 return;
+
+            int count = Mathf.Min(_scenarioNames?.Length ?? 0, _scenarioTimes?.Length ?? 0);
+            BlendProperties.LightingScenarioCount = count;
 
             if (BlendProperties.LightingScenarioCount == 0)
             {
@@ -86,7 +159,9 @@ namespace UnityEssentials
 
                 // If then determine the next scenario, looping back to the first if at the end
                 // else last scenario loops to the first scenario
-                followingTime = (i < BlendProperties.LightingScenarioCount - 1) ? _scenarioTimes[i + 1] : _scenarioTimes[0];
+                followingTime = (i < BlendProperties.LightingScenarioCount - 1)
+                    ? _scenarioTimes[i + 1]
+                    : _scenarioTimes[0];
 
                 // Check if current time falls within the interval
                 if (IsTimeWithinInterval(currentTimeInHours, currentTime, followingTime))
@@ -109,8 +184,10 @@ namespace UnityEssentials
             if (totalTimeDifference <= 0)
             {
                 // Prevent division by zero or negative blending
-                BlendProperties.CurrentLightingScenario = _scenarioNames[Array.IndexOf(_scenarioTimes, previousScenarioTime)];
-                BlendProperties.NextLightingScenario = _scenarioNames[Array.IndexOf(_scenarioTimes, previousScenarioTime)];
+                BlendProperties.CurrentLightingScenario =
+                    _scenarioNames[Array.IndexOf(_scenarioTimes, previousScenarioTime)];
+                BlendProperties.NextLightingScenario =
+                    _scenarioNames[Array.IndexOf(_scenarioTimes, previousScenarioTime)];
                 BlendProperties.CurrentBlendFactor = 0f;
                 return;
             }
@@ -119,7 +196,8 @@ namespace UnityEssentials
             float blendFactor = Mathf.Clamp01((float)(elapsedTime / totalTimeDifference));
 
             // Update current and next scenarios with blend factor
-            BlendProperties.CurrentLightingScenario = _scenarioNames[Array.IndexOf(_scenarioTimes, previousScenarioTime)];
+            BlendProperties.CurrentLightingScenario =
+                _scenarioNames[Array.IndexOf(_scenarioTimes, previousScenarioTime)];
             BlendProperties.NextLightingScenario = _scenarioNames[Array.IndexOf(_scenarioTimes, nextScenarioTime)];
             BlendProperties.CurrentBlendFactor = blendFactor;
 
@@ -179,7 +257,8 @@ namespace UnityEssentials
             return (24.0 - startTimeInHours) + endTimeInHours;
         }
 
-        private void FetchLightingScenarios(out string[] _scenarioNames, out double[] _scenarioTimes, out int lightingScenarioCount)
+        private void FetchLightingScenarios(out string[] _scenarioNames, out double[] _scenarioTimes,
+            out int lightingScenarioCount)
         {
             lightingScenarioCount = 0;
 
