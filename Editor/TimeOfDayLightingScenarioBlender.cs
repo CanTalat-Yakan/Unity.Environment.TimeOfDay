@@ -48,7 +48,7 @@ namespace UnityEssentials
         public void Update() =>
             UpdateBlend(TimeOfDay.TimeInHours + 0.001f);
 
-        [Button]
+        [Button(ButtonLayout.Begin)]
         public void BakeCurrentTimeLightingScenario()
         {
             var name = GetLightingScenarioName(TimeOfDay.DateTime, TimeOfDay.UTCOffset);
