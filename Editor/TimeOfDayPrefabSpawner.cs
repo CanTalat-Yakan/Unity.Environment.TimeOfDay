@@ -11,7 +11,7 @@ namespace UnityEssentials
         [MenuItem("GameObject/Essentials/Time of Day", false, priority = 100)]
         private static void InstantiateTimeOfDay(MenuCommand menuCommand)
         {
-            var prefab = ResourceLoaderEditor.InstantiatePrefab("UnityEssentials_Prefab_TimeOfDay", "Time of Day");
+            var prefab = AssetResolverEditor.InstantiatePrefab("UnityEssentials_Prefab_TimeOfDay", "Time of Day");
             if (prefab != null)
             {
                 var timeOfDay = prefab.GetComponent<TimeOfDay>();
