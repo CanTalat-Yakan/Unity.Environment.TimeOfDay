@@ -1,13 +1,11 @@
 {
-  "name": "com.unityessentials.timeofday",
-  "version": "1.0.0",
-  "displayName": "Unity Environment TimeOfDay",
+  "name": "com.unityessentials.environment.timeofday",
+  "version": "2.0.0",
+  "displayName": "Environment TimeOfDay",
   "description": "This is a part of the UnityEssentials Ecosystem",
   "unity": "6000.0",
   "unityRelease": "",
-  "dependencies": {
-    "com.unity.render-pipelines.high-definition": "17.1.0"
-  },
+  "dependencies": {},
   "keywords": [],
   "author": {
     "name": "Unity Essentials",

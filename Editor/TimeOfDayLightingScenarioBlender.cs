@@ -24,7 +24,7 @@ namespace UnityEssentials
     public class TimeOfDayLightingScenarioBlender : MonoBehaviour
     {
         [HideInInspector] public TimeOfDay TimeOfDay;
-        public APVLightingBaker LightingScenarioBaker;
+        public AdaptiveProbeVolumeLightingBaker LightingScenarioBaker;
 
         [field: Space] [field: SerializeField] public BlendProperties BlendProperties { get; private set; } = new();
 
@@ -108,11 +108,11 @@ namespace UnityEssentials
         private static async Task WaitForBakeToFinish()
         {
             // Bake starts asynchronously; wait until Unity flips Lightmapping.isRunning true
-            while (!APVLightingBaker.IsBakingInProgress)
+            while (!AdaptiveProbeVolumeLightingBaker.IsBakingInProgress)
                 await WaitForEditorUpdate();
 
             // Then wait until it's done
-            while (APVLightingBaker.IsBakingInProgress)
+            while (AdaptiveProbeVolumeLightingBaker.IsBakingInProgress)
                 await WaitForEditorUpdate();
         }
 
