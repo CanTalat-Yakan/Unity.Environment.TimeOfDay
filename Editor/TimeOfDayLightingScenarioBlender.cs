@@ -33,9 +33,6 @@ namespace UnityEssentials
         private string[] _scenarioNames = null;
         private double[] _scenarioTimes = null;
 
-        // Bake runner state (editor only)
-        private bool _isBaking24Hours;
-
         public void Awake()
         {
             TimeOfDay = GetComponent<TimeOfDay>();
@@ -114,12 +111,6 @@ namespace UnityEssentials
             // Then wait until it's done
             while (AdaptiveProbeVolumeLightingBaker.IsBakingInProgress)
                 await WaitForEditorUpdate();
-        }
-
-        private void OnDisable()
-        {
-            // Ensure we don't keep state in case of recompiles/domain reloads
-            _isBaking24Hours = false;
         }
 
         private void UpdateBlend(double currentTimeInHours)
