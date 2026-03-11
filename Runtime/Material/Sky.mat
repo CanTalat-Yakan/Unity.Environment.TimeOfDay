@@ -127,7 +127,7 @@ Material:
     - _ScalePerlin: 0
     - _Skybox_Strength: 35.33
     - _Smoothness: 0.3
-    - _SpaceWeight: 0
+    - _SpaceWeight: 0.00020000005
     - _Star_Correction_Intensity: 10
     - _Star_Correction_Weight: 0
     - _Star_Cubemap_Power: 1.3
@@ -136,7 +136,7 @@ Material:
     - _Stars_Brightness: 0.33
     - _Stars_High_Density_Amount: 1
     - _Stars_Intensity: 1
-    - _Stars_Low_Density_Amount: 0.713
+    - _Stars_Low_Density_Amount: 0.5
     - _Stars_Texture_Tiling: 10
     - _Steps: 48
     m_Colors:
