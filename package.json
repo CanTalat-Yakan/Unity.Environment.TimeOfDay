@@ -1,6 +1,6 @@
 {
   "name": "com.unityessentials.environment.timeofday",
-  "version": "2.0.12",
+  "version": "2.0.13",
   "displayName": "Environment TimeOfDay",
   "description": "This is a part of the UnityEssentials Ecosystem",
   "unity": "6000.0",
